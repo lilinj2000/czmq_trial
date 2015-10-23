@@ -47,31 +47,43 @@ class XSubTest : public ::testing::Test
 
 TEST_F(XSubTest, pubTest)
 {
-  std::string filter = "test ";
+  std::string filter = "";
   
-  zsock_t* pub = zsock_new_pub( (">" + xsub_endpoint_).data() );
-  ASSERT_TRUE( pub!=NULL );
+  zsock_t* pub1 = zsock_new_pub( (">" + xsub_endpoint_).data() );
+  ASSERT_TRUE( pub1!=NULL );
+
+  zsock_t* pub2 = zsock_new_pub( (">" + xsub_endpoint_).data() );
+  ASSERT_TRUE( pub2!=NULL );
 
   zsock_t* sub = zsock_new_sub( xpub_endpoint_.data(), filter.data() );
   ASSERT_TRUE( sub!=NULL );
 
   cond_->wait(1000);
 
-  std::string hello = filter + "Hello, World!";
-  SOIL_DEBUG <<"send msg: " <<hello;
+  std::string hello1 = filter + "Hello, World! pub1";
+  SOIL_DEBUG <<"send msg: " <<hello1;
   
-  zstr_send( pub, hello.data() );
+  zstr_send( pub1, hello1.data() );
 
-  zmsg_t* zmsg = zmsg_recv( sub );
-  ASSERT_TRUE( zmsg!=NULL );
-
-  char* msg = zmsg_popstr(zmsg);
-  SOIL_DEBUG <<"recv msg: " <<msg;
-
-  free( msg );
-  zmsg_destroy( &zmsg );
+  std::string hello2 = filter + "Hello, World! pub2";
+  SOIL_DEBUG <<"send msg: " <<hello2;
   
-  zsock_destroy( &pub );
+  zstr_send( pub2, hello2.data() );
+
+  for(int i=0; i<2; i++)
+  {
+    zmsg_t* zmsg = zmsg_recv( sub );
+    ASSERT_TRUE( zmsg!=NULL );
+
+    char* msg = zmsg_popstr(zmsg);
+    SOIL_DEBUG <<"recv msg: " <<msg;
+
+    free( msg );
+    zmsg_destroy( &zmsg );
+  }
+  
+  zsock_destroy( &pub1 );
+  zsock_destroy( &pub2 );
   zsock_destroy( &sub );
 
   ASSERT_TRUE( true );
