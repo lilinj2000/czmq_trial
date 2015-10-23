@@ -44,19 +44,6 @@ if test -d /llj/libs ; then
 fi
 
 
-dnl soil lib
-AC_ARG_WITH([soil],
-    [AS_HELP_STRING([--with-soil],
-        [home path of the soil, defaults to $home_libs/soil])],
-    [SOIL_HOME="$withval"],
-    [SOIL_HOME="$home_libs/soil"])
-AC_SUBST([SOIL_HOME])
-
-SOIL_CPPFLAGS="-I$SOIL_HOME/include"
-SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
-AC_SUBST(SOIL_CPPFLAGS)
-AC_SUBST(SOIL_LIBADD)
-
 dnl boost lib
 AC_ARG_WITH([boost],
     [AS_HELP_STRING([--with-boost],
@@ -78,6 +65,49 @@ BOOST_LIBADD="$BOOST_HOME/lib/libboost_log_setup.so \
 AC_SUBST(BOOST_CPPFLAGS)
 AC_SUBST(BOOST_LIBADD)
 
+dnl soil lib
+AC_ARG_WITH([soil],
+    [AS_HELP_STRING([--with-soil],
+        [home path of the soil, defaults to $home_libs/soil])],
+    [SOIL_HOME="$withval"],
+    [SOIL_HOME="$home_libs/soil"])
+AC_SUBST([SOIL_HOME])
+
+SOIL_CPPFLAGS="-I$SOIL_HOME/include"
+SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+AC_SUBST(SOIL_CPPFLAGS)
+AC_SUBST(SOIL_LIBADD)
+
+dnl zmq lib
+ZMQ_HOME=$home_3rd/libzmq
+AC_ARG_WITH([zmq],
+    [AS_HELP_STRING([--with-zmq],
+        [home path of the soil, defaults to $ZMQ_HOME])],
+    [ZMQ_HOME="$withval"],
+    [ZMQ_HOME=$ZMQ_HOME])
+AC_SUBST([ZMQ_HOME])
+
+ZMQ_CPPFLAGS="-I$ZMQ_HOME/include"
+ZMQ_LIBADD="$CZMQ_HOME/lib/libzmq.la"
+AC_SUBST(ZMQ_CPPFLAGS)
+AC_SUBST(ZMQ_LIBADD)
+
+dnl czmq lib
+CZMQ_HOME=$home_3rd/czmq
+AC_ARG_WITH([czmq],
+    [AS_HELP_STRING([--with-czmq],
+        [home path of the soil, defaults to $CZMQ_HOME])],
+    [CZMQ_HOME="$withval"],
+    [CZMQ_HOME=$CZMQ_HOME])
+AC_SUBST([CZMQ_HOME])
+
+CZMQ_CPPFLAGS="-I$CZMQ_HOME/include"
+CZMQ_LIBADD="$CZMQ_HOME/lib/libczmq.la"
+AC_SUBST(CZMQ_CPPFLAGS)
+AC_SUBST(CZMQ_LIBADD)
+
+
+
 dnl gtest lib
 AC_ARG_WITH([gtest],
     [AS_HELP_STRING([--with-gtest],
@@ -93,6 +123,6 @@ AC_SUBST(GTEST_LIBADD)
 
 AC_OUTPUT([
 	Makefile
-	])
+	zsock/Makefile])
 
 
